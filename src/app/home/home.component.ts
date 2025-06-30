@@ -21,6 +21,7 @@ import {
   outputToObservable,
   outputFromObservable,
 } from '@angular/core/rxjs-interop';
+import { CoursesServiceWithFetch } from '../services/courses-fetch.service';
 
 @Component({
   selector: 'home',
@@ -30,47 +31,23 @@ import {
   standalone: true,
 })
 export class HomeComponent {
-  // Source Signal:
-  counter = signal(0);
+  courses = signal<Course[]>([]);
 
-  // Computed Signal (always read-only):
-  tenXCounter = computed(() => {
-    const val = this.counter();
-    return val * 10;
-  });
-
-  // Computed Signal (always read-only):
-  hundredXCounter = computed(() => {
-    const val = this.tenXCounter();
-    return val * 10;
-  });
-
-  effectReference: EffectRef | null = null;
+  coursesService = inject(CoursesServiceWithFetch); // Preferred approach over contructor styled injection.
 
   constructor() {
-    // Use effects *very sparingly* as it easily becomes unweidly to address bugs => NEVER USE FOR CRUD DATABASE OPERATIONS.
-
-    this.effectReference = effect((onCleanup) => {
-      const counter = this.counter();
-      const timeout = setTimeout(() => {
-        console.log(
-          `counter value:: ${counter} (100x: ${this.hundredXCounter()})`
-        );
-      }, 1000);
-
-      onCleanup(() => {
-        console.log('Calling clean up...');
-        clearTimeout(timeout);
-      });
-    });
+    this.loadCourses().then(() =>
+      console.log(`All courses loaded: `, this.courses())
+    );
   }
 
-  increment() {
-    this.counter.update((val) => val + 1);
-  }
-
-  cleanup() {
-    this.effectReference?.destroy();
-    console.log('done!');
+  async loadCourses() {
+    try {
+      const courses = await this.coursesService.loadAllCourses();
+      this.courses.set(courses);
+    } catch (err) {
+      alert(`error handling courses`);
+      console.error(err);
+    }
   }
 }
