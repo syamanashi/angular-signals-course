@@ -43,6 +43,15 @@ export class HomeComponent {
     return val * 10;
   });
 
+  constructor() {
+    // Use effects *very sparingly* as it easily becomes unweidly to address bugs => NEVER USE FOR CRUD DATABASE OPERATIONS.
+    effect(() => {
+      console.log(
+        `counter value:: ${this.counter()} (100x: ${this.hundredXCounter()})`
+      );
+    });
+  }
+
   increment() {
     this.counter.update((val) => val + 1);
   }
