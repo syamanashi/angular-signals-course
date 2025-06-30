@@ -33,7 +33,8 @@ import { CoursesServiceWithFetch } from '../services/courses-fetch.service';
 export class HomeComponent {
   courses = signal<Course[]>([]);
 
-  coursesService = inject(CoursesServiceWithFetch); // Preferred approach over contructor styled injection.
+  coursesService = inject(CoursesService); // Preferred approach over contructor styled injection.
+  // coursesService = inject(CoursesServiceWithFetch); // Preferred approach over contructor styled injection.
 
   constructor() {
     this.loadCourses().then(() =>
