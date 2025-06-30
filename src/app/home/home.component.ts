@@ -28,9 +28,22 @@ import {
   standalone: true,
 })
 export class HomeComponent {
-  values = signal<number[]>([0]);
+  // Source Signal:
+  counter = signal(0);
 
-  append() {
-    this.values.update((values) => [...values, values[values.length - 1] + 1]);
+  // Computed Signal (always read-only):
+  tenXCounter = computed(() => {
+    const val = this.counter();
+    return val * 10;
+  });
+
+  // Computed Signal (always read-only):
+  hundredXCounter = computed(() => {
+    const val = this.tenXCounter();
+    return val * 10;
+  });
+
+  increment() {
+    this.counter.update((val) => val + 1);
   }
 }
