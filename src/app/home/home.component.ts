@@ -3,6 +3,7 @@ import {
   Component,
   computed,
   effect,
+  EffectRef,
   inject,
   Injector,
   signal,
@@ -44,26 +45,32 @@ export class HomeComponent {
     return val * 10;
   });
 
-  injector = inject(Injector); // NEW/BETTER ALTERNATIVE TO constructor(private injector: Injector) {
+  effectReference: EffectRef | null = null;
 
   constructor() {
     // Use effects *very sparingly* as it easily becomes unweidly to address bugs => NEVER USE FOR CRUD DATABASE OPERATIONS.
 
-    afterNextRender(() => {
-      effect(
-        () => {
-          console.log(
-            `counter value:: ${this.counter()} (100x: ${this.hundredXCounter()})`
-          );
-        },
-        {
-          injector: this.injector,
-        }
-      );
+    this.effectReference = effect((onCleanup) => {
+      const counter = this.counter();
+      const timeout = setTimeout(() => {
+        console.log(
+          `counter value:: ${counter} (100x: ${this.hundredXCounter()})`
+        );
+      }, 1000);
+
+      onCleanup(() => {
+        console.log('Calling clean up...');
+        clearTimeout(timeout);
+      });
     });
   }
 
   increment() {
     this.counter.update((val) => val + 1);
+  }
+
+  cleanup() {
+    this.effectReference?.destroy();
+    console.log('done!');
   }
 }
