@@ -1,4 +1,5 @@
 import {
+  afterNextRender,
   Component,
   computed,
   effect,
@@ -43,11 +44,21 @@ export class HomeComponent {
     return val * 10;
   });
 
+  injector = inject(Injector); // NEW/BETTER ALTERNATIVE TO constructor(private injector: Injector) {
+
   constructor() {
     // Use effects *very sparingly* as it easily becomes unweidly to address bugs => NEVER USE FOR CRUD DATABASE OPERATIONS.
-    effect(() => {
-      console.log(
-        `counter value:: ${this.counter()} (100x: ${this.hundredXCounter()})`
+
+    afterNextRender(() => {
+      effect(
+        () => {
+          console.log(
+            `counter value:: ${this.counter()} (100x: ${this.hundredXCounter()})`
+          );
+        },
+        {
+          injector: this.injector,
+        }
       );
     });
   }
