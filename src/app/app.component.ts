@@ -31,4 +31,9 @@ export class AppComponent {
   authService = inject(AuthService);
 
   isLoggedIn = this.authService.isLoggedIn;
+
+  onLogout() {
+    console.log('logging out....');
+    this.authService.logout();
+  }
 }
