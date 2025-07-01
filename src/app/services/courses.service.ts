@@ -39,10 +39,7 @@ export class CoursesService {
     return firstValueFrom(course$);
   }
 
-  async deleteCourse(
-    courseId: string,
-    changes: Partial<Course>
-  ): Promise<Course> {
+  async deleteCourse(courseId: string): Promise<Course> {
     const delete$ = this.http.delete<Course>(
       `${this.env.apiRoot}/courses/${courseId}`
     );

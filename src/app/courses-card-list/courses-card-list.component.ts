@@ -14,6 +14,7 @@ export class CoursesCardListComponent {
   courses = input.required<Course[]>();
   dialog = inject(MatDialog);
   courseUpdated = output<Course>();
+  courseDeleted = output<string>();
 
   async onEditCourse(course: Course) {
     const newCourse = await openEditCourseDialog(this.dialog, {
@@ -24,5 +25,9 @@ export class CoursesCardListComponent {
 
     console.log('Course edited:', newCourse);
     this.courseUpdated.emit(newCourse);
+  }
+
+  async onCourseDeleted(course: Course) {
+    this.courseDeleted.emit(course.id);
   }
 }

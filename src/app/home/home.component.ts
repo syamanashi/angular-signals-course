@@ -61,16 +61,28 @@ export class HomeComponent {
       const courses = await this.coursesService.loadAllCourses();
       this.#courses.set(courses.sort(sortCoursesBySeqNo));
     } catch (err) {
-      alert(`error handling courses`);
       console.error(err);
+      alert(`error handling courses`);
     }
   }
 
   onCourseUpdated(updatedCourse: Course) {
     const courses = this.#courses();
-    const newCourses = courses.map((course) => {
-      return course.id === updatedCourse.id ? updatedCourse : course;
-    });
+    const newCourses = courses.map((course) =>
+      course.id === updatedCourse.id ? updatedCourse : course
+    );
     this.#courses.set(newCourses);
+  }
+
+  async onCourseDeleted(courseId: string) {
+    try {
+      await this.coursesService.deleteCourse(courseId);
+      const courses = this.#courses();
+      const newCourses = courses.filter((course) => course.id !== courseId);
+      this.#courses.set(newCourses);
+    } catch (err) {
+      console.error(err);
+      alert(`error deleting course.`);
+    }
   }
 }
