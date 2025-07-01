@@ -64,14 +64,11 @@ export class HomeComponent {
 
   async loadCourses() {
     try {
-      this.loadingService.loadingOn();
       const courses = await this.coursesService.loadAllCourses();
       this.#courses.set(courses.sort(sortCoursesBySeqNo));
     } catch (err) {
       console.error(err);
       alert(`error handling courses`);
-    } finally {
-      this.loadingService.loadingOff();
     }
   }
 
