@@ -20,15 +20,24 @@ export class LoginComponent {
 
   messagesService = inject(MessagesService);
 
-  onLogin() {
+  authService = inject(AuthService);
+
+  router = inject(Router);
+
+  async onLogin() {
     try {
       const { email, password } = this.form.value;
+
       if (!email || !password) {
         this.messagesService.showMessage(
           'Enter an email and password.',
           'error'
         );
+        return;
       }
+      await this.authService.login(email, password);
+      this.messagesService.clear();
+      await this.router.navigate(['/home']);
     } catch (err) {
       console.error(err);
       this.messagesService.showMessage(
