@@ -2,12 +2,12 @@
 <div class="messages-container">
   <div class="message" [ngClass]="message()?.severity">
     {{ message()?.text }}
+    <img
+      src="/assets/icons/close.svg"
+      alt="close"
+      class="close"
+      (click)="onClose()"
+    />
   </div>
-  <img
-    src="/assets/icons/close.svg"
-    alt="close"
-    class="close"
-    (click)="onClose()"
-  />
 </div>
 }

@@ -49,7 +49,7 @@ export class HomeComponent {
     return courses.filter((course) => course.category === 'ADVANCED');
   });
 
-  loadingService = inject(LoadingService);
+  messagesService = inject(MessagesService);
 
   constructor() {
     effect(() => {
@@ -68,7 +68,7 @@ export class HomeComponent {
       this.#courses.set(courses.sort(sortCoursesBySeqNo));
     } catch (err) {
       console.error(err);
-      alert(`error handling courses`);
+      this.messagesService.showMessage(`Error loading courses!`, 'error');
     }
   }
 
@@ -88,7 +88,7 @@ export class HomeComponent {
       this.#courses.set(newCourses);
     } catch (err) {
       console.error(err);
-      alert(`error deleting course.`);
+      this.messagesService.showMessage(`Error deleting course!`, 'error');
     }
   }
 
