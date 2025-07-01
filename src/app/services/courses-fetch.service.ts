@@ -23,7 +23,7 @@ export class CoursesServiceWithFetch {
       body: JSON.stringify(course),
     });
 
-    return (await response.json()) as Course;
+    return response.json();
   }
 
   async saveCourse(
@@ -38,7 +38,7 @@ export class CoursesServiceWithFetch {
       body: JSON.stringify(changes),
     });
 
-    return await response.json();
+    return response.json();
   }
 
   async deleteCourse(courseId: string): Promise<void> {
