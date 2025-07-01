@@ -15,10 +15,7 @@ export class CoursesService {
 
   async loadAllCourses(): Promise<Course[]> {
     const courses$ = this.http.get<GetCoursesResponse>(
-      `${this.env.apiRoot}/courses`,
-      {
-        context: new HttpContext().set(SkipLoading, true),
-      }
+      `${this.env.apiRoot}/courses`
     );
     const response = await firstValueFrom(courses$);
     return response.courses;
