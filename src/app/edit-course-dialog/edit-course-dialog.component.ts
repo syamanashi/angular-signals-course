@@ -39,6 +39,8 @@ export class EditCourseDialogComponent {
     iconUrl: [''],
   });
 
+  coursesService = inject(CoursesService);
+
   constructor() {
     console.log('data', this.data);
     this.form.patchValue({
@@ -51,6 +53,27 @@ export class EditCourseDialogComponent {
 
   onClose() {
     this.dialogRef.close();
+  }
+
+  async onSave() {
+    const courseProps = this.form.value as Partial<Course>;
+
+    if (this.data.mode === 'update') {
+      this.saveCourse(this.data.course!.id, courseProps);
+    }
+  }
+
+  async saveCourse(courseId: string, changes: Partial<Course>) {
+    try {
+      const updatedCourse = await this.coursesService.saveCourse(
+        courseId,
+        changes
+      );
+      this.dialogRef.close(updatedCourse);
+    } catch (err) {
+      console.error(err);
+      alert(`Failed to save the course.`);
+    }
   }
 }
 
