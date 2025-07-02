@@ -164,19 +164,27 @@ export class HomeComponent {
   }
 
   onToSignalExample() {
-    const number$ = interval(1000).pipe(startWith(0));
-    const numbers = toSignal(number$, {
-      injector: this.injector,
-      requireSync: true,
-      // initialValue: 0,
-    });
-    effect(
-      () => {
-        console.log(`Numbers: `, numbers());
-      },
-      {
+    try {
+      const courses$ = from(this.coursesService.loadAllCourses()).pipe(
+        catchError((err) => {
+          console.log(`Error caught in catchError`, err); // this is where the error is caught.
+          throw err;
+        })
+      );
+      const courses = toSignal(courses$, {
         injector: this.injector,
-      }
-    );
+        // rejectErrors: true,
+      });
+      effect(
+        () => {
+          console.log(`courses: `, courses());
+        },
+        {
+          injector: this.injector,
+        }
+      );
+    } catch (err) {
+      console.log(`Error in catch block: `, err); // does not fire
+    }
   }
 }
