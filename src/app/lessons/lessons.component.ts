@@ -22,8 +22,21 @@ export class LessonsComponent {
   lessonsService = inject(LessonsService);
   searchInput = viewChild.required<ElementRef>('search'); // .required ensures an error is thrown if element is missing.
 
-  onSearch() {
+  async onSearch() {
     const query = this.searchInput()?.nativeElement.value;
     console.log('search query', query);
+
+    const results = await this.lessonsService.loadLessons({ query });
+
+    this.lessons.set(results);
+  }
+
+  onLessonSelected(lesson: Lesson) {
+    this.mode.set('detail');
+    this.selectedLesson.set(lesson);
+  }
+
+  onCancel() {
+    this.mode.set('master');
   }
 }
