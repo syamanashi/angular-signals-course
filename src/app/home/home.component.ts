@@ -4,13 +4,16 @@ import {
   computed,
   effect,
   EffectRef,
+  ElementRef,
   inject,
   Injector,
   signal,
+  viewChild,
 } from '@angular/core';
 import { CoursesService } from '../services/courses.service';
 import { Course, sortCoursesBySeqNo } from '../models/course.model';
 import { MatTab, MatTabGroup } from '@angular/material/tabs';
+import { MatTooltip } from '@angular/material/tooltip';
 import { CoursesCardListComponent } from '../courses-card-list/courses-card-list.component';
 import { MatDialog } from '@angular/material/dialog';
 import { MessagesService } from '../messages/messages.service';
@@ -27,7 +30,7 @@ import { LoadingService } from '../loading/loading.service';
 
 @Component({
   selector: 'home',
-  imports: [MatTabGroup, MatTab, CoursesCardListComponent],
+  imports: [MatTabGroup, MatTab, CoursesCardListComponent, MatTooltip],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
   standalone: true,
@@ -51,7 +54,24 @@ export class HomeComponent {
 
   messagesService = inject(MessagesService);
 
+  beginnersList = viewChild<CoursesCardListComponent>('beginnersList');
+  beginnersListElementRef = viewChild('beginnersList', {
+    read: ElementRef,
+  });
+  beginnersListTooltipDirectiveRef = viewChild('beginnersList', {
+    read: MatTooltip,
+  });
+
   constructor() {
+    effect(() => {
+      console.log(`beginnersList`, this.beginnersList());
+      console.log(`beginnersListElementRef`, this.beginnersListElementRef());
+      console.log(
+        `beginnersListTooltipDirectiveRef`,
+        this.beginnersListTooltipDirectiveRef()
+      );
+    });
+
     effect(() => {
       console.log(`beginner courses: `, this.beginnerCourses());
       console.log(`advanced courses: `, this.advancedCourses());
