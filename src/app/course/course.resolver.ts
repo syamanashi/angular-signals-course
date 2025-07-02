@@ -7,7 +7,7 @@ import { Course } from '../models/course.model';
 import { inject } from '@angular/core';
 import { CoursesService } from '../services/courses.service';
 
-export const courseResolve: ResolveFn<Course | null> = async (
+export const courseResolver: ResolveFn<Course | null> = async (
   route: ActivatedRouteSnapshot,
   state: RouterStateSnapshot
 ) => {

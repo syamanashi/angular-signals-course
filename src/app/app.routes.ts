@@ -6,7 +6,8 @@ import { ResourceDemoComponent } from './resource-demo/resource-demo.component';
 import { LinkedSignalDemoComponent } from './linked-signal/linked-signal-demo.component';
 import { isUserAuthenticated } from './guards/auth.guard';
 import { CourseComponent } from './course/course.component';
-import { courseResolve } from './course/course.resolver';
+import { courseResolver } from './course/course.resolver';
+import { courseLessonsResolver } from './course/course-lessons.resolver';
 
 export const routes: Routes = [
   {
@@ -19,7 +20,8 @@ export const routes: Routes = [
     component: CourseComponent,
     canActivate: [isUserAuthenticated],
     resolve: {
-      course: courseResolve,
+      course: courseResolver,
+      lessons: courseLessonsResolver,
     },
   },
   {
