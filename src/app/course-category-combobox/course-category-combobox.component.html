@@ -1,5 +1,8 @@
 <div class="form-control">
-  <label>{{ label() }}</label>
+  <!-- <label>{{ label() }}</label> -->
+
+  <!-- content projection (projected content) -->
+  <ng-content select=".title" />
 
   <select
     [value]="value()"

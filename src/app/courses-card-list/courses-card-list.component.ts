@@ -28,7 +28,7 @@ export class CoursesCardListComponent {
 
   constructor() {
     effect(() => {
-      console.log('>>> courseCards', this.courseCards());
+      console.log('courseCards', this.courseCards());
     });
   }
 
