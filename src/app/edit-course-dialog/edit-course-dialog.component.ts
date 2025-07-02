@@ -36,20 +36,27 @@ export class EditCourseDialogComponent {
   form = this.fb.group({
     title: [''],
     longDescription: [''],
-    category: [''],
     iconUrl: [''],
   });
+
+  category = signal<CourseCategory>('BEGINNER');
 
   coursesService = inject(CoursesService);
   messagesService = inject(MessagesService);
 
   constructor() {
     console.log('data', this.data);
+    // console.log('this.data.course!.category', this.data.course!.category);
+
     this.form.patchValue({
       title: this.data.course?.title,
       longDescription: this.data.course?.longDescription,
-      category: this.data.course?.category,
       iconUrl: this.data.course?.iconUrl,
+    });
+    this.category.set(this.data.course!.category);
+
+    effect(() => {
+      console.log(`Course category bi-directional binding: ${this.category()}`);
     });
   }
 
@@ -59,6 +66,7 @@ export class EditCourseDialogComponent {
 
   async onSave() {
     const courseProps = this.form.value as Partial<Course>;
+    courseProps.category = this.category();
 
     if (this.data.mode === 'update') {
       await this.saveCourse(this.data.course!.id, courseProps);
