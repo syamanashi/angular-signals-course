@@ -31,12 +31,18 @@ export class LessonsComponent {
     this.lessons.set(results);
   }
 
+  onCancel() {
+    this.mode.set('master');
+  }
+
   onLessonSelected(lesson: Lesson) {
     this.mode.set('detail');
     this.selectedLesson.set(lesson);
   }
 
-  onCancel() {
-    this.mode.set('master');
+  onLessonUpdated(lesson: Lesson) {
+    this.lessons.update((lessons) =>
+      lessons.map((l) => (l.id === lesson.id ? lesson : l))
+    );
   }
 }
