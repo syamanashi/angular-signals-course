@@ -62,7 +62,11 @@ export class HomeComponent {
     read: MatTooltip,
   });
 
+  // courses$ = toObservable(this.#courses);
+
   constructor() {
+    // this.courses$.subscribe((courses) => console.log(`>>> courses$`, courses));
+
     effect(() => {
       console.log(`beginnersList`, this.beginnersList());
       console.log(`beginnersListElementRef`, this.beginnersListElementRef());
@@ -124,5 +128,14 @@ export class HomeComponent {
 
     const newCourses: Course[] = [...this.#courses(), newCourse];
     this.#courses.set(newCourses);
+  }
+
+  injector = inject(Injector);
+
+  onToObservableExample() {
+    const courses$ = toObservable(this.#courses, {
+      injector: this.injector,
+    });
+    courses$.subscribe((courses) => console.log(`>>> courses$`, courses));
   }
 }
