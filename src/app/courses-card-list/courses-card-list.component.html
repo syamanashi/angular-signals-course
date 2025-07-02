@@ -1,6 +1,6 @@
 @for(course of courses(); track course.id) {
 
-<div class="courses-card">
+<div class="courses-card" #courseCard>
   <div class="course-header">
     <span class="course-title">{{ course.seqNo }}. {{ course.title }}</span>
   </div>
