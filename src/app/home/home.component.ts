@@ -17,7 +17,7 @@ import { MatTooltip } from '@angular/material/tooltip';
 import { CoursesCardListComponent } from '../courses-card-list/courses-card-list.component';
 import { MatDialog } from '@angular/material/dialog';
 import { MessagesService } from '../messages/messages.service';
-import { catchError, from, throwError } from 'rxjs';
+import { catchError, from, interval, startWith, throwError } from 'rxjs';
 import {
   toObservable,
   toSignal,
@@ -163,15 +163,16 @@ export class HomeComponent {
     }, 0);
   }
 
-  courses$ = from(this.coursesService.loadAllCourses());
-
   onToSignalExample() {
-    const courses = toSignal(this.courses$, {
+    const number$ = interval(1000).pipe(startWith(0));
+    const numbers = toSignal(number$, {
       injector: this.injector,
+      requireSync: true,
+      // initialValue: 0,
     });
     effect(
       () => {
-        console.log(`courses: `, courses());
+        console.log(`Numbers: `, numbers());
       },
       {
         injector: this.injector,
