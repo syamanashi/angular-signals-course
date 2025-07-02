@@ -162,4 +162,20 @@ export class HomeComponent {
       numbers.set(8);
     }, 0);
   }
+
+  courses$ = from(this.coursesService.loadAllCourses());
+
+  onToSignalExample() {
+    const courses = toSignal(this.courses$, {
+      injector: this.injector,
+    });
+    effect(
+      () => {
+        console.log(`courses: `, courses());
+      },
+      {
+        injector: this.injector,
+      }
+    );
+  }
 }
